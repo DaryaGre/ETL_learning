@@ -1,0 +1,15 @@
+cd doc1
+docker-compose up -d
+docker exec -it my_postgres psql -U root -c "create database my_database"
+git clone https://github.com/gregrahn/tpch-kit.git
+cd tpch-kit/dbgen
+docker cp ./dss.ddl my_postgres:/
+docker exec -it my_postgres psql my_database -f dss.ddl
+
+cd doc2
+docker-compose up -d
+docker exec -it my_postgres2 psql -U root -c "create database my_database2"
+git clone https://github.com/gregrahn/tpch-kit.git
+cd tpch-kit/dbgen
+docker cp ./dss.ddl my_postgres2:/
+docker exec -it my_postgres2 psql my_database2 -f dss.ddl
